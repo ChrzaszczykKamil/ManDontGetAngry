@@ -1,4 +1,4 @@
-package com.example.javatcsproject;
+package man_dont_get_angry;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;

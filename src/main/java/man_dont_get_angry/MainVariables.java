@@ -1,4 +1,4 @@
-package com.example.javatcsproject;
+package man_dont_get_angry;
 
 public class MainVariables {
 	public static double sizeX = 1024;

@@ -1,4 +1,4 @@
-package com.example.javatcsproject;
+package man_dont_get_angry;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

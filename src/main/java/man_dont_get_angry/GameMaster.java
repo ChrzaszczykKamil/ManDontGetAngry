@@ -1,10 +1,10 @@
-package com.example.javatcsproject;
+package man_dont_get_angry;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
 
-import static com.example.javatcsproject.MainVariables.sizeX;
-import static com.example.javatcsproject.MainVariables.sizeY;
+import static man_dont_get_angry.MainVariables.sizeX;
+import static man_dont_get_angry.MainVariables.sizeY;
 
 public class GameMaster
 {

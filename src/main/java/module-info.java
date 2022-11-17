@@ -3,6 +3,6 @@ module com.example.project {
 	requires javafx.fxml;
 
 
-	opens com.example.javatcsproject to javafx.fxml;
-	exports com.example.javatcsproject;
+	opens man_dont_get_angry to javafx.fxml;
+	exports man_dont_get_angry;
 }
