@@ -30,18 +30,24 @@ public class Menu
 		gc.drawImage(background, 0, 0, sizeX, sizeY);
 
 		Image title=new Image(Objects.requireNonNull(getClass().getResource("/UI/title.png")).toString());
-		gc.drawImage(title, (sizeX-300)/2, (sizeY)/9);
+		gc.drawImage(title, (sizeX-title.getWidth())/2, (sizeY)/9);
 
 
-		ImageButton startButton=new ImageButton("/UI/button.png", (sizeX-100)/3, sizeY/2, (int)(sizeX*0.1), (int)(sizeY*0.05));
-		menuRoot.getChildren().add(startButton.get());
-		startButton.get().setOnAction(e->{
-			System.out.println("CLICKED");
-			GameMaster game=new GameMaster();
-			scene.setRoot(game.getRoot());
+		ImageButton onlineButton=new ImageButton("/UI/local_button.png", (sizeX-100)/2, sizeY*6/10, 100, 50);
+		menuRoot.getChildren().add(onlineButton.get());
+		onlineButton.get().setOnAction(e->{
+			new GameMaster(scene);
+			//GameMaster game=
 		});
 
-		ImageButton exitButton=new ImageButton("/UI/button.png", (sizeX-100)*2/3, sizeY/2, (int)(sizeX*0.1), (int)(sizeY*0.05));
+		ImageButton localButton=new ImageButton("/UI/online_button.png", (sizeX-100)/2, sizeY*7/10, 100, 50);
+		menuRoot.getChildren().add(localButton.get());
+		localButton.get().setOnAction(e->{
+			System.out.println("CLICKED");
+			//GameMaster game=new GameMaster();
+		});
+
+		ImageButton exitButton=new ImageButton("/UI/exit_button.png", (sizeX-100)/2, sizeY*8/10, 100, 50);
 		menuRoot.getChildren().add(exitButton.get());
 		exitButton.get().setOnAction(arg0->System.exit(0));
 	}
