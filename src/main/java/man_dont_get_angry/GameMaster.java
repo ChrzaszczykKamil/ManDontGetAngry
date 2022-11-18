@@ -3,39 +3,88 @@ package man_dont_get_angry;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 
-import static man_dont_get_angry.MainVariables.sizeX;
-import static man_dont_get_angry.MainVariables.sizeY;
+import java.util.Arrays;
+
+import static man_dont_get_angry.Dice.rollPossible;
 
 public class GameMaster
 {
 	public Group root;
-	private final Pawn[][]pawns;
+	public static Player currentPlayer;
+	public static int currentPlayerID=0;
+	public static int numberOfPlayers;
+	public static Player[] players;
+	public static Dice dice;
+	static int[] pathStatus;
+	static boolean madeAMove;
 
 	public GameMaster(Scene scene)
 	{
 		LoadLevel lvl=new LoadLevel(scene);
 		root=lvl.getRoot();
+
+		numberOfPlayers=4;
+		madeAMove=false;
+		pathStatus=new int[40];
+		Arrays.fill(pathStatus, -1);
+
 		//add pawns
-		pawns=new Pawn[4][4];
-		for(int i=0; i<4;i++){
-			for(int j=0; j<4;j++){
-				pawns[i][j]= new Pawn(i, 4*i+j);
-			}
+		dice=new Dice(root);
+		players=new Player[numberOfPlayers];
+
+		for(int i=0; i<numberOfPlayers;i++){
+			players[i]=new Player(i);
+			players[i].createPawns();
+			lvl.placePawns(players[i]);
 		}
-		lvl.placePawns(pawns);
-
-		ImageButton onlineButton=new ImageButton("/UI/local_button.png", (sizeX-100)/2, sizeY*6/10, 100, 50);
-		root.getChildren().add(onlineButton.get());
-		onlineButton.get().setOnAction(e->{
-			getPawnByID(4*1+1).getPawnIV().setX(20);
-			getPawnByID(4*2+1).getPawnIV().setX(40);
-			getPawnByID(4*3+1).getPawnIV().setX(80);
-			getPawnByID(4*0+1).getPawnIV().setX(100);
-		});
-
+		currentPlayer=players[0];
 	}
 
-	public Pawn getPawnByID(int id){
-		return pawns[(id-id%4)/4][id%4];
+	public static void playerTurn(){
+		rollPossible=false;
+		if(!currentPlayer.playerTurn()){
+			setNextPlayer();
+		}
+	}
+
+	public static boolean isSpotTakenByAlly(int coordinate, int id){
+		return pathStatus[coordinate]==id;
+	}
+	public static void setPathSpot(int coordinate, int id){
+		if(id!=-1)
+		{
+			if(pathStatus[coordinate]!=-1)
+			{
+				for(int i=0; i<4; i++)
+				{
+					if(players[pathStatus[coordinate]].getPlayerPawns()[i].pathLocation==coordinate)
+					{players[pathStatus[coordinate]].getPlayerPawns()[i].pawnDied();}
+				}
+			}
+		}
+		pathStatus[coordinate]=id;
+	}
+
+	public static boolean isSpotTakenByEnemy(int coordinate, int id){
+		return pathStatus[coordinate]!=id&&pathStatus[coordinate]!=-1;
+	}
+
+	public static void setNextPlayer(){
+		rollPossible=true;
+		currentPlayer.turnFinished();
+		if(numberOfPlayers<3)
+			currentPlayerID=(currentPlayerID+1)%numberOfPlayers;
+		else if(numberOfPlayers==3)
+		{
+			currentPlayerID=(currentPlayerID+2)%numberOfPlayers;
+		}else{
+			if(currentPlayerID==2)
+				currentPlayerID=1;
+			else if(currentPlayerID==3)
+				currentPlayerID=0;
+			else
+				currentPlayerID+=2;
+		}
+		currentPlayer=players[currentPlayerID];
 	}
 }

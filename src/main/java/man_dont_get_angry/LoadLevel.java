@@ -22,17 +22,16 @@ public class LoadLevel
 		Canvas canvas = new Canvas(sizeX, sizeY);
 		root.getChildren().add(canvas);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		Image background = new Image(Objects.requireNonNull(getClass().getResource("/UI/background.png")).toString());
+		Image background = new Image(Objects.requireNonNull(getClass().getResource("/images/background.png")).toString());
 		gc.drawImage(background, 0, 0, sizeX, sizeY);
 
-		Image field=new Image(Objects.requireNonNull(getClass().getResource("/UI/field.png")).toString());
-		Image greenField=new Image(Objects.requireNonNull(getClass().getResource("/UI/green_field.png")).toString());
-		Image blueField=new Image(Objects.requireNonNull(getClass().getResource("/UI/blue_field.png")).toString());
-		Image redField=new Image(Objects.requireNonNull(getClass().getResource("/UI/red_field.png")).toString());
-		Image yellowField=new Image(Objects.requireNonNull(getClass().getResource("/UI/yellow_field.png")).toString());
+		Image field=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/field.png")).toString());
+		Image greenField=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/green_field.png")).toString());
+		Image blueField=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/blue_field.png")).toString());
+		Image redField=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/red_field.png")).toString());
+		Image yellowField=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/yellow_field.png")).toString());
 
-		for(int i=0;i<11; i++)
-		{
+		for(int i=0;i<11; i++) {
 			int j=0;
 			int max=11;
 			if(i<4||i>6)
@@ -97,37 +96,43 @@ public class LoadLevel
 			}
 		}
 
+
 		scene.setRoot(root);
 	}
 
-	public void placePawns(Pawn[][] pawns){
-		int id=0;
-		for(int i=8; i<10;i++){
-			for(int j=8; j<10;j++,id++){
-				placeSinglePawn(id,pawns, i, j);
-			}
-		}
-		for(int i=1; i<3;i++){
-			for(int j=8; j<10;j++,id++){
-				placeSinglePawn(id,pawns, i, j);
-			}
-		}
-		for(int i=1; i<3;i++){
-			for(int j=1; j<3;j++,id++){
-				placeSinglePawn(id,pawns, i, j);
-			}
-		}
-		for(int i=8; i<10;i++){
-			for(int j=1; j<3;j++,id++){
-				placeSinglePawn(id,pawns, i, j);
-			}
-		}
+	public void createDice(){
+
 	}
 
-	private void placeSinglePawn(int id,Pawn[][] pawns, int i, int j){
-		pawns[(id-id%4)/4][id%4].getPawnIV().setX(sizeX/2-64*i+32*9);
-		pawns[(id-id%4)/4][id%4].getPawnIV().setY(sizeX/2-64*j+32*9);
-		root.getChildren().add(pawns[(id-id%4)/4][id%4].getPawnIV());
+	public void placePawns(Player player){
+		Pawn[] pawns=player.getPlayerPawns();
+
+		if(player.getPlayerID()==0)
+			for(int i=8; i<10; i++)
+				for(int j=8; j<10; j++)
+					placeSinglePawn(pawns[i-8+2*(j-8)], i, j);
+
+		else if(player.getPlayerID()==2)
+			for(int i=1; i<3; i++)
+				for(int j=8; j<10; j++)
+					placeSinglePawn(pawns[i-1+2*(j-8)], i, j);
+
+		else if(player.getPlayerID()==1)
+			for(int i=1; i<3; i++)
+				for(int j=1; j<3; j++)
+					placeSinglePawn(pawns[i-1+2*(j-1)], i, j);
+
+		else
+			for(int i=8; i<10; i++)
+				for(int j=1; j<3; j++)
+					placeSinglePawn(pawns[i-8+2*(j-1)], i, j);
+	}
+
+	private void placeSinglePawn(Pawn pawn, int i, int j){
+		pawn.getPawnIV().setX(sizeX/2-64*i+32*9);
+		pawn.getPawnIV().setY(sizeX/2-64*j+32*9);
+		root.getChildren().add(pawn.getPawnIV());
+		pawn.setInitialXY(sizeX/2-64*i+32*9,sizeX/2-64*j+32*9);
 	}
 
 	public Group getRoot()
