@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static man_dont_get_angry.GameMaster.playerTurn;
 import static man_dont_get_angry.MainVariables.sizeX;
@@ -42,8 +43,6 @@ public class Dice
 	}
 
 	public int roll(){
-		rolledNumber=6;
-		return 6;/*
 		rolledNumber=ThreadLocalRandom.current().nextInt(1, 7);
 		if(rolledNumber==1)
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice1.png")).toString()));
@@ -57,12 +56,7 @@ public class Dice
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice5.png")).toString()));
 		if(rolledNumber==6)
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice6.png")).toString()));
-		return rolledNumber;*/
-	}
-
-	public ImageView getDiceIV()
-	{
-		return diceIV;
+		return rolledNumber;
 	}
 
 	int getRolledNumber(){

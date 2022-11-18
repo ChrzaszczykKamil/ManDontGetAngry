@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import java.util.Arrays;
 
 import static man_dont_get_angry.Dice.rollPossible;
+import static man_dont_get_angry.LoadLevel.changeBackground;
 
 public class GameMaster
 {
@@ -86,5 +87,6 @@ public class GameMaster
 				currentPlayerID+=2;
 		}
 		currentPlayer=players[currentPlayerID];
+		changeBackground(currentPlayerID);
 	}
 }

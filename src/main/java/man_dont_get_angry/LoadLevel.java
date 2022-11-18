@@ -15,15 +15,23 @@ import static man_dont_get_angry.MainVariables.sizeY;
 public class LoadLevel
 {
 	public Group root;
+	public static GraphicsContext gc;
+	static Image blue_bg;
+	static Image yellow_bg;
+	static Image red_bg;
+	static Image green_bg;
 
 	public LoadLevel(Scene scene)
 	{
 		root=new Group();
 		Canvas canvas = new Canvas(sizeX, sizeY);
 		root.getChildren().add(canvas);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		Image background = new Image(Objects.requireNonNull(getClass().getResource("/images/background.png")).toString());
-		gc.drawImage(background, 0, 0, sizeX, sizeY);
+		gc = canvas.getGraphicsContext2D();
+		green_bg = new Image(Objects.requireNonNull(getClass().getResource("/images/green_background.png")).toString());
+		yellow_bg = new Image(Objects.requireNonNull(getClass().getResource("/images/yellow_background.png")).toString());
+		red_bg = new Image(Objects.requireNonNull(getClass().getResource("/images/red_background.png")).toString());
+		blue_bg = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
+		gc.drawImage(green_bg, 0, 0, sizeX, sizeY);
 
 		Image field=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/field.png")).toString());
 		Image greenField=new Image(Objects.requireNonNull(getClass().getResource("/images/fields/green_field.png")).toString());
@@ -100,10 +108,6 @@ public class LoadLevel
 		scene.setRoot(root);
 	}
 
-	public void createDice(){
-
-	}
-
 	public void placePawns(Player player){
 		Pawn[] pawns=player.getPlayerPawns();
 
@@ -138,5 +142,15 @@ public class LoadLevel
 	public Group getRoot()
 	{
 		return root;
+	}
+	public static void changeBackground(int player){
+		if(player==0)
+			gc.drawImage(green_bg, 0, 0, sizeX, sizeY);
+		else if(player==1)
+			gc.drawImage(yellow_bg, 0, 0, sizeX, sizeY);
+		else if(player==2)
+			gc.drawImage(blue_bg, 0, 0, sizeX, sizeY);
+		else if(player==3)
+		gc.drawImage(red_bg, 0, 0, sizeX, sizeY);
 	}
 }
