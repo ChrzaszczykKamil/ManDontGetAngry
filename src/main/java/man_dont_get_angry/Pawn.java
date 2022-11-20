@@ -9,52 +9,51 @@ import static man_dont_get_angry.GameMaster.*;
 import static man_dont_get_angry.MainVariables.sizeX;
 public class Pawn
 {
+	private final EventHandler <MouseEvent> eventHandler;
+	private final ImageView pawnIV;
+	private final int playerID;
+	private int pathLocation;
+	private int traveled;
+	private int x;
+	private int y;
+	private int podiumPlace;
+	private double startX;
+	private double startY;
+	private boolean deployed;
+	private boolean isOnPodium;
 
-	ImageView pawnIV;
-	int pawnID;
-	int pathLocation;
-	int x;
-	int y;
-	double startX;
-	double startY;
-	boolean deployed;
-	int playerID;
-	EventHandler <MouseEvent> eventHandler;
-
-	public Pawn(int pawnID, int playerID, Image img){
-		this.pawnID=pawnID;
+	public Pawn(int playerID, Image img){
 		this.x=0;
 		this.y=0;
 		this.playerID=playerID;
+
+		traveled=0;
 		pathLocation=-1;
+		podiumPlace=-1;
+		isOnPodium=false;
 		deployed=false;
+
 		pawnIV=new ImageView(img);
 		eventHandler =e ->{
 			if(!deployed)
 			{
-				if(dice.getRolledNumber()==6)
-				{
-					System.out.println("XD");
-					System.out.println(playerID==0&&!isSpotTakenByAlly(0,playerID));
-					System.out.println((playerID==2&&!isSpotTakenByAlly(10,playerID)));
-					System.out.println((playerID==1&&!isSpotTakenByAlly(20,playerID)));
-					System.out.println((playerID==3&&!isSpotTakenByAlly(30,playerID)));
-					System.out.println(pathLocation);
-					System.out.println("XD");
-					if(playerID==0&&!isSpotTakenByAlly(0,playerID)
-							||(playerID==2&&!isSpotTakenByAlly(10,playerID))
-							||(playerID==1&&!isSpotTakenByAlly(20,playerID))
-							||(playerID==3&&!isSpotTakenByAlly(30,playerID))){
-						deployPawn();
-						setNextPlayer();
-					}
-				}
+				deployPawn();
 			}
-			else{
-				if(moveToNext(dice.getRolledNumber()))
-					setNextPlayer();
+			else if(isOnPodium){
+				moveToPodium(podiumPlace+dice.getRolledNumber());
 			}
+			else if(traveled+dice.getRolledNumber()<=40){
+				moveToNext(dice.getRolledNumber());
+			}else{
+				moveToPodium((traveled+dice.getRolledNumber())-41);
+			}
+			setNextPlayer();
 		};
+	}
+
+	public void setInitialXY(double startX, double startY){
+		this.startX=startX;
+		this.startY=startY;
 	}
 
 	public void addEvent(){
@@ -65,12 +64,38 @@ public class Pawn
 		pawnIV.removeEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
 	}
 
-	public ImageView getPawnIV()
-	{
-		return pawnIV;
+	private void deployPawn(){
+		if(playerID==0){//green
+			pathLocation=0;
+			x=0;
+			y=4;
+			pawnIV.setX(sizeX/2-64*6+32);
+			pawnIV.setY(sizeX/2-64-32);
+		}else if(playerID==1){//yellow
+			pathLocation=20;
+			x=10;
+			y=6;
+			pawnIV.setX(sizeX/2+64*4+32);
+			pawnIV.setY(sizeX/2+64-32);
+		}else if(playerID==2){//blue
+			pathLocation=10;
+			x=6;
+			y=0;
+			pawnIV.setX(sizeX/2+32);
+			pawnIV.setY(sizeX/2-64*5-32);
+		}else{//red
+			pathLocation=30;
+			x=4;
+			y=10;
+			pawnIV.setX(sizeX/2-64*2+32);
+			pawnIV.setY(sizeX/2+64*5-32);
+		}
+		traveled=1;
+		setPathSpot(pathLocation,playerID);
+		deployed=true;
 	}
 
-	public void moveByOne(){
+	private void moveByOne(){
 		if(y==4){
 			if(x<4||(x>5&&x<10)) {
 				x++;
@@ -138,19 +163,72 @@ public class Pawn
 		pawnIV.setY(sizeX/2-64*j+32*9);*/
 	}
 
-	public boolean moveToNext(int n){
-		if(!isSpotTakenByAlly((pathLocation+n)%40, playerID)){
-			for(int i=0; i<n;i++){
-				moveByOne();
-			}
-			setPathSpot(pathLocation,-1);
-			pathLocation=(pathLocation+n)%40;
-
-			setPathSpot(pathLocation,playerID);
-			return true;
+	private void moveToNext(int n) {
+		for(int i=0; i<n; i++)
+		{
+			moveByOne();
 		}
-		System.out.println("TAKEN");
-		return false;
+		setPathSpot(pathLocation, -1);
+		pathLocation=(pathLocation+n)%40;
+		traveled+=n;
+
+		setPathSpot(pathLocation, playerID);
+	}
+
+	private void moveToPodium(int podiumSpot){
+		isOnPodium=true;
+		if(pathLocation!=-1)
+			setPathSpot(pathLocation, -1);
+		pathLocation=-1;
+		podium[playerID][podiumSpot]=true;
+		if(podiumPlace!=-1){
+			podium[playerID][podiumPlace]=false;
+		}
+		podiumPlace=podiumSpot;
+		if(playerID==0) {
+			if(podiumSpot==0)
+				pawnIV.setX(sizeX/2-64*5+32);
+			else if(podiumSpot==1)
+				pawnIV.setX(sizeX/2-64*4+32);
+			else if(podiumSpot==2)
+				pawnIV.setX(sizeX/2-64*3+32);
+			else if(podiumSpot==3)
+				pawnIV.setX(sizeX/2-64*2+32);
+			pawnIV.setY(sizeX/2-32);
+		}
+		else if(playerID==1) {
+			if(podiumSpot==0)
+				pawnIV.setX(sizeX/2+64*3+32);
+			else if(podiumSpot==1)
+				pawnIV.setX(sizeX/2+64*2+32);
+			else if(podiumSpot==2)
+				pawnIV.setX(sizeX/2+64+32);
+			else if(podiumSpot==3)
+				pawnIV.setX(sizeX/2+32);
+			pawnIV.setY(sizeX/2-32);
+		}
+		else if(playerID==2) {
+			if(podiumSpot==0)
+				pawnIV.setY(sizeX/2-64*4-32);
+			else if(podiumSpot==1)
+				pawnIV.setY(sizeX/2-64*3-32);
+			else if(podiumSpot==2)
+				pawnIV.setY(sizeX/2-64*2-32);
+			else if(podiumSpot==3)
+				pawnIV.setY(sizeX/2-64-32);
+			pawnIV.setX(sizeX/2-32);
+		}
+		else{
+			if(podiumSpot==0)
+				pawnIV.setY(sizeX/2+64*4-32);
+			else if(podiumSpot==1)
+				pawnIV.setY(sizeX/2+64*3-32);
+			else if(podiumSpot==2)
+				pawnIV.setY(sizeX/2+64*2-32);
+			else if(podiumSpot==3)
+				pawnIV.setY(sizeX/2+64-32);
+			pawnIV.setX(sizeX/2-32);
+		}
 	}
 
 	public void pawnDied(){
@@ -158,43 +236,42 @@ public class Pawn
 		x=-1;
 		y=-1;
 		deployed=false;
+		traveled=0;
 		pawnIV.setX(startX);
 		pawnIV.setY(startY);
 	}
 
-	private void deployPawn(){
-		if(playerID==0){//green
-			pathLocation=0;
-			x=0;
-			y=4;
-			pawnIV.setX(sizeX/2-64*6+32);
-			pawnIV.setY(sizeX/2-64-32);
-		}else if(playerID==1){//yellow
-			pathLocation=20;
-			x=10;
-			y=6;
-			pawnIV.setX(sizeX/2+64*4+32);
-			pawnIV.setY(sizeX/2+64-32);
-		}else if(playerID==2){//blue
-			pathLocation=10;
-			x=6;
-			y=0;
-			pawnIV.setX(sizeX/2+32);
-			pawnIV.setY(sizeX/2-64*5-32);
-		}else{//red
-			pathLocation=30;
-			x=4;
-			y=10;
-			pawnIV.setX(sizeX/2-64*2+32);
-			pawnIV.setY(sizeX/2+64*5-32);
+	public boolean canPawnMove(){
+		if(isOnPodium){
+			return isPodiumSpotFree(podiumPlace+dice.getRolledNumber(), playerID);
 		}
-		setPathSpot(pathLocation,playerID);
-		deployed=true;
+		else if(deployed){
+			if(traveled+dice.getRolledNumber()<=40)
+			{
+				return isSpotFree((pathLocation+dice.getRolledNumber())%40, playerID);
+			}
+			else{
+				return isPodiumSpotFree((traveled+dice.getRolledNumber())-41, playerID);
+			}
+		}
+		else{
+			if(dice.getRolledNumber()==6){
+				return playerID==0 && isSpotFree(0, playerID)
+						|| (playerID==2 && isSpotFree(10, playerID))
+						|| (playerID==1 && isSpotFree(20, playerID))
+						|| (playerID==3 && isSpotFree(30, playerID));
+			}
+			else{
+				return false;
+			}
+		}
 	}
 
-	public void setInitialXY(double startX, double startY){
-		this.startX=startX;
-		this.startY=startY;
+	public int getPathLocation() {
+		return pathLocation;
 	}
 
+	public ImageView getPawnIV() {
+		return pawnIV;
+	}
 }

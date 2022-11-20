@@ -7,42 +7,37 @@ import javafx.scene.image.ImageView;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static man_dont_get_angry.GameMaster.currentPlayerID;
 import static man_dont_get_angry.GameMaster.playerTurn;
 import static man_dont_get_angry.MainVariables.sizeX;
 import static man_dont_get_angry.MainVariables.sizeY;
 
 public class Dice
 {
-	ImageView diceIV;
+	private ImageView diceIV;
 	private int rolledNumber;
-	public static int diceRollCounter;
 	public static boolean rollPossible;
-	Group root;
 
 	public Dice(Group root){
-		this.root=root;
-		diceRollCounter=0;
 		rollPossible=true;
 
-		diceIV=new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice1.png")).toString()));
-		diceIV.setX(sizeX/2-32);
-		diceIV.setY(sizeX*7/8);
+		diceIV=new ImageView();
 
-		ImageButton rollDice=new ImageButton("/images/buttons/roll_button.png", (sizeX-128)/2, sizeY*14/15, 100, 50);
+		ImageButton rollDice=new ImageButton("/images/buttons/roll_button.png", (sizeX-128)/2, sizeY*14/15, 128, 64);
 		root.getChildren().add(rollDice.get());
 		root.getChildren().add(diceIV);
 
 		rollDice.get().setOnAction(e->{
 			if(rollPossible)
 			{
-				diceRollCounter++;
-				System.out.println(roll());
+				moveDiceToCorner(currentPlayerID);
+				roll();
 				playerTurn();
 			}
 		});
 	}
 
-	public int roll(){
+	public void roll(){
 		rolledNumber=ThreadLocalRandom.current().nextInt(1, 7);
 		if(rolledNumber==1)
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice1.png")).toString()));
@@ -56,10 +51,28 @@ public class Dice
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice5.png")).toString()));
 		if(rolledNumber==6)
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice6.png")).toString()));
-		return rolledNumber;
 	}
 
-	int getRolledNumber(){
+	private void moveDiceToCorner(int c){
+		if(c==0){
+			diceIV.setX(20);
+			diceIV.setY(20);
+		}
+		else if(c==1){
+			diceIV.setX(sizeX-100);
+			diceIV.setY(sizeX-100);
+		}
+		else if(c==2){
+			diceIV.setX(sizeX-100);
+			diceIV.setY(20);
+		}
+		else{
+			diceIV.setX(20);
+			diceIV.setY(sizeX-100);
+		}
+	}
+
+	public int getRolledNumber(){
 		return rolledNumber;
 	}
 }

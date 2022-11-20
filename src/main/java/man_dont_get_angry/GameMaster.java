@@ -10,23 +10,25 @@ import static man_dont_get_angry.LoadLevel.changeBackground;
 
 public class GameMaster
 {
-	public Group root;
-	public static Player currentPlayer;
-	public static int currentPlayerID=0;
-	public static int numberOfPlayers;
-	public static Player[] players;
-	public static Dice dice;
-	static int[] pathStatus;
-	static boolean madeAMove;
+	private static Group root;
 
-	public GameMaster(Scene scene)
-	{
+	public static int currentPlayerID;
+	public static boolean [][]podium;
+	public static Dice dice;
+
+	private static Player currentPlayer;
+	private static Player[] players;
+	private static int numberOfPlayers;
+	private static int[] pathStatus;
+
+	public GameMaster(Scene scene) {
 		LoadLevel lvl=new LoadLevel(scene);
 		root=lvl.getRoot();
 
 		numberOfPlayers=4;
-		madeAMove=false;
+		currentPlayerID=0;
 		pathStatus=new int[40];
+		podium=new boolean[4][4];
 		Arrays.fill(pathStatus, -1);
 
 		//add pawns
@@ -48,9 +50,17 @@ public class GameMaster
 		}
 	}
 
-	public static boolean isSpotTakenByAlly(int coordinate, int id){
-		return pathStatus[coordinate]==id;
+	public static boolean isSpotFree(int coordinate, int id){
+		return pathStatus[coordinate]!=id;
 	}
+
+	public static boolean isPodiumSpotFree(int coordinate, int id){
+		if(coordinate<4)
+			return !podium[id][coordinate];
+		else
+			return false;
+	}
+
 	public static void setPathSpot(int coordinate, int id){
 		if(id!=-1)
 		{
@@ -58,7 +68,7 @@ public class GameMaster
 			{
 				for(int i=0; i<4; i++)
 				{
-					if(players[pathStatus[coordinate]].getPlayerPawns()[i].pathLocation==coordinate)
+					if(players[pathStatus[coordinate]].getPlayerPawns()[i].getPathLocation()==coordinate)
 					{players[pathStatus[coordinate]].getPlayerPawns()[i].pawnDied();}
 				}
 			}
@@ -66,11 +76,30 @@ public class GameMaster
 		pathStatus[coordinate]=id;
 	}
 
-	public static boolean isSpotTakenByEnemy(int coordinate, int id){
-		return pathStatus[coordinate]!=id&&pathStatus[coordinate]!=-1;
+	private static boolean checkWin(){
+		for(int i=0; i<4;i++){
+			int x=0;
+			for(int j=0; j<4; j++){
+				if(podium[i][j])
+					x++;
+			}
+			if(x==4)
+				return true;
+		}
+		return false;
+	}
+
+	private static void clearLevel(){
+		System.out.println("WINNER");
+		new EndGameScreen(root, currentPlayer);
 	}
 
 	public static void setNextPlayer(){
+		if(checkWin())
+		{
+			clearLevel();
+			return;
+		}
 		rollPossible=true;
 		currentPlayer.turnFinished();
 		if(numberOfPlayers<3)

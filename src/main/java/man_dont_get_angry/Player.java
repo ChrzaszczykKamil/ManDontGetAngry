@@ -4,12 +4,10 @@ import javafx.scene.image.Image;
 
 import java.util.Objects;
 
-import static man_dont_get_angry.GameMaster.dice;
-
 public class Player
 {
-	int PlayerID;
-	Pawn[] playerPawns;
+	private int PlayerID;
+	private Pawn[] playerPawns;
 
 
 	Player (int PlayerID){
@@ -21,23 +19,27 @@ public class Player
 		for(int i=0; i<4; i++)
 		{
 			if(PlayerID==0)
-			{playerPawns[i]=new Pawn(i,PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/green_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/green_pawn.png")).toString()));}
 			else if(PlayerID==1)
-			{playerPawns[i]=new Pawn(i,PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/yellow_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/yellow_pawn.png")).toString()));}
 			else if(PlayerID==2)
-			{playerPawns[i]=new Pawn(i,PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/blue_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/blue_pawn.png")).toString()));}
 			else
-			{playerPawns[i]=new Pawn(i,PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/red_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/red_pawn.png")).toString()));}
 		}
 	}
 
 	public boolean playerTurn(){
-		if(playerPawns[0].deployed||playerPawns[1].deployed||playerPawns[2].deployed||playerPawns[3].deployed||dice.getRolledNumber()==6)
+		if(playerPawns[0].canPawnMove()||playerPawns[1].canPawnMove()||playerPawns[2].canPawnMove()||playerPawns[3].canPawnMove())
 		{
-			playerPawns[0].addEvent();
-			playerPawns[1].addEvent();
-			playerPawns[2].addEvent();
-			playerPawns[3].addEvent();
+			if(playerPawns[0].canPawnMove())
+				playerPawns[0].addEvent();
+			if(playerPawns[1].canPawnMove())
+				playerPawns[1].addEvent();
+			if(playerPawns[2].canPawnMove())
+				playerPawns[2].addEvent();
+			if(playerPawns[3].canPawnMove())
+				playerPawns[3].addEvent();
 			return true;
 		}else{
 			return false;

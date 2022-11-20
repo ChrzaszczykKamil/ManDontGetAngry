@@ -23,8 +23,18 @@ public class Menu
 		Canvas canvas = new Canvas(MainVariables.sizeX, MainVariables.sizeY);
 		menuRoot.getChildren().add(canvas);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+
+
+
+
 		Image background = new Image(Objects.requireNonNull(getClass().getResource("/images/background.png")).toString());
+
+
+
 		gc.drawImage(background, 0, 0, MainVariables.sizeX, MainVariables.sizeY);
+		background = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
+
 
 		Image title=new Image(Objects.requireNonNull(getClass().getResource("/images/title.png")).toString());
 		gc.drawImage(title, (MainVariables.sizeX-title.getWidth())/2, (MainVariables.sizeY)/9);
