@@ -25,7 +25,6 @@ public class GameMaster
 		LoadLevel lvl=new LoadLevel(scene);
 		root=lvl.getRoot();
 
-		numberOfPlayers=4;
 		currentPlayerID=0;
 		pathStatus=new int[40];
 		podium=new boolean[4][4];
@@ -41,6 +40,10 @@ public class GameMaster
 			lvl.placePawns(players[i]);
 		}
 		currentPlayer=players[0];
+	}
+
+	public static void setPlayersCount(int x){
+		numberOfPlayers=x;
 	}
 
 	public static void playerTurn(){
