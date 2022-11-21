@@ -4,17 +4,18 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static man_dont_get_angry.GameMaster.currentPlayerID;
-import static man_dont_get_angry.GameMaster.playerTurn;
+import static man_dont_get_angry.Client.clientID;
+import static man_dont_get_angry.GameMaster.*;
 import static man_dont_get_angry.MainVariables.sizeX;
 import static man_dont_get_angry.MainVariables.sizeY;
 
-public class Dice
+public class Dice implements Serializable
 {
-	private ImageView diceIV;
+	private transient ImageView diceIV;
 	private int rolledNumber;
 	public static boolean rollPossible;
 
@@ -28,7 +29,7 @@ public class Dice
 		root.getChildren().add(diceIV);
 
 		rollDice.get().setOnAction(e->{
-			if(rollPossible)
+			if(rollPossible&&(currentPlayerID==clientID||isOffline))
 			{
 				moveDiceToCorner(currentPlayerID);
 				roll();

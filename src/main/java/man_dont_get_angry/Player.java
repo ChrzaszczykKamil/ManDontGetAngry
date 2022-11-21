@@ -2,9 +2,10 @@ package man_dont_get_angry;
 
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Player
+public class Player implements Serializable
 {
 	private int PlayerID;
 	private Pawn[] playerPawns;

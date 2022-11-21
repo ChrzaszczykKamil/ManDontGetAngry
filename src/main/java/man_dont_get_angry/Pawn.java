@@ -5,12 +5,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.Serializable;
+
+import static man_dont_get_angry.Client.clientID;
 import static man_dont_get_angry.GameMaster.*;
 import static man_dont_get_angry.MainVariables.sizeX;
-public class Pawn
+
+public class Pawn implements Serializable
 {
-	private final EventHandler <MouseEvent> eventHandler;
-	private final ImageView pawnIV;
+	private final transient EventHandler <MouseEvent> eventHandler;
+	private final transient ImageView pawnIV;
 	private final int playerID;
 	private int pathLocation;
 	private int traveled;
@@ -35,19 +39,26 @@ public class Pawn
 
 		pawnIV=new ImageView(img);
 		eventHandler =e ->{
-			if(!deployed)
+			if(isOffline ||currentPlayerID==clientID)
 			{
-				deployPawn();
+				if(!deployed)
+				{
+					deployPawn();
+				}
+				else if(isOnPodium)
+				{
+					moveToPodium(podiumPlace+dice.getRolledNumber());
+				}
+				else if(traveled+dice.getRolledNumber()<=40)
+				{
+					moveToNext(dice.getRolledNumber());
+				}
+				else
+				{
+					moveToPodium((traveled+dice.getRolledNumber())-41);
+				}
+				setNextPlayer();
 			}
-			else if(isOnPodium){
-				moveToPodium(podiumPlace+dice.getRolledNumber());
-			}
-			else if(traveled+dice.getRolledNumber()<=40){
-				moveToNext(dice.getRolledNumber());
-			}else{
-				moveToPodium((traveled+dice.getRolledNumber())-41);
-			}
-			setNextPlayer();
 		};
 	}
 
@@ -158,9 +169,6 @@ public class Pawn
 				pawnIV.setY(pawnIV.getY()+64);
 			}
 		}
-		/*
-		pawnIV.setX(sizeX/2-64*i+32*9);
-		pawnIV.setY(sizeX/2-64*j+32*9);*/
 	}
 
 	private void moveToNext(int n) {

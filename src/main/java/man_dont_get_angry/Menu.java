@@ -39,18 +39,15 @@ public class Menu
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(backgroundAnimation%4==0){
+				if(backgroundAnimation%4==0)
 					background = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
-				}
-				else if(backgroundAnimation%4==1){
+				else if(backgroundAnimation%4==1)
 					background = new Image(Objects.requireNonNull(getClass().getResource("/images/red_background.png")).toString());
-				}
-				else if(backgroundAnimation%4==2){
+				else if(backgroundAnimation%4==2)
 					background = new Image(Objects.requireNonNull(getClass().getResource("/images/yellow_background.png")).toString());
-				}
-				else{
+				else
 					background = new Image(Objects.requireNonNull(getClass().getResource("/images/green_background.png")).toString());
-				}
+
 				gc.drawImage(background, 0, 0, sizeX, sizeY);
 				gc.drawImage(title, sizeX/4, sizeY/12,sizeX/2, sizeX/2);
 				backgroundAnimation++;
@@ -73,7 +70,7 @@ public class Menu
 		ImageButton localButton=new ImageButton("/images/buttons/online_button.png", (sizeX-100)/2, sizeY*7/10, 100, 50);
 		menuRoot.getChildren().add(localButton.get());
 		localButton.get().setOnAction(e->{
-			System.out.println("CLICKED");
+			new Client("127.0.0.1", 5000, scene);
 		});
 
 		ImageButton exitButton=new ImageButton("/images/buttons/exit_button.png", (sizeX-100)/2, sizeY*8/10, 100, 50);

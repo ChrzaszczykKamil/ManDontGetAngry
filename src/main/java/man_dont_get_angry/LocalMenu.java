@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static man_dont_get_angry.GameMaster.isOffline;
 import static man_dont_get_angry.GameMaster.setPlayersCount;
 import static man_dont_get_angry.MainVariables.sizeX;
 import static man_dont_get_angry.MainVariables.sizeY;
@@ -109,6 +110,7 @@ public class LocalMenu{
 		ImageButton onlineButton=new ImageButton("/images/buttons/local_button.png", (sizeX-100)/2, sizeY*6/10, 100, 50);
 		root.getChildren().add(onlineButton.get());
 		onlineButton.get().setOnAction(e->{
+			isOffline=true;
 			new GameMaster(scene);
 		});
 	}

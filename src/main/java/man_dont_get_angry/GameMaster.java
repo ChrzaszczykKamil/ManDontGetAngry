@@ -3,8 +3,12 @@ package man_dont_get_angry;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.Arrays;
 
+import static man_dont_get_angry.Client.getSocket;
 import static man_dont_get_angry.Dice.rollPossible;
 import static man_dont_get_angry.LoadLevel.changeBackground;
 
@@ -15,10 +19,11 @@ public class GameMaster
 	public static int currentPlayerID;
 	public static boolean [][]podium;
 	public static Dice dice;
+	public static boolean isOffline;
 
 	private static Player currentPlayer;
 	private static Player[] players;
-	private static int numberOfPlayers;
+	public static int numberOfPlayers;
 	private static int[] pathStatus;
 
 	public GameMaster(Scene scene) {
@@ -100,6 +105,7 @@ public class GameMaster
 	public static void setNextPlayer(){
 		if(checkWin())
 		{
+			sendUpdate();
 			clearLevel();
 			return;
 		}
@@ -120,5 +126,32 @@ public class GameMaster
 		}
 		currentPlayer=players[currentPlayerID];
 		changeBackground(currentPlayerID);
+		sendUpdate();
+	}
+
+	public static void sendUpdate(){
+		Socket socket=getSocket();
+		ObjectOutputStream out =null;
+		try
+		{
+			out=new ObjectOutputStream(socket.getOutputStream());
+
+		out.writeObject(currentPlayerID);
+			out.writeObject(podium);
+			out.writeObject(dice);
+			out.writeObject(currentPlayer);
+			out.writeObject(players);
+			out.writeObject(numberOfPlayers);
+			out.writeObject(pathStatus);
+
+			out.close();
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void getUpdate(){
+
 	}
 }

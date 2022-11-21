@@ -14,7 +14,7 @@ import static man_dont_get_angry.Menu.scene;
 
 public class EndGameScreen
 {
-	EndGameScreen(Group root, Player winner){
+	public EndGameScreen(Group root, Player winner){
 		root.getChildren().clear();
 		Canvas canvas = new Canvas(sizeX, sizeY);
 		root.getChildren().add(canvas);
