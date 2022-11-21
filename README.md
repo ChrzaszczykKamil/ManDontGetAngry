@@ -1,4 +1,4 @@
-# ManDontGetAngry
+# Man, Don't Get Angry!
 Man, Don't Get Angry! (Mensch ärgere Dich nicht) is a popular German game made fully in JavaFX
 
 ## Installation
