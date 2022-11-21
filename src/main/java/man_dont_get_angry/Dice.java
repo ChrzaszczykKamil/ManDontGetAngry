@@ -39,7 +39,9 @@ public class Dice implements Serializable
 	}
 
 	public void roll(){
-		rolledNumber=ThreadLocalRandom.current().nextInt(1, 7);
+		rolledNumber=ThreadLocalRandom.current().nextInt(1, 9);//7
+		if(rolledNumber>6)
+			rolledNumber=6;
 		if(rolledNumber==1)
 			diceIV.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/dice/dice1.png")).toString()));
 		if(rolledNumber==2)

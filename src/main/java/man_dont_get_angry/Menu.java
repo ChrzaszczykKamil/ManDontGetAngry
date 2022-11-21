@@ -54,11 +54,7 @@ public class Menu
 			}
 		}, 0, 2000);
 
-
-
 		gc.drawImage(background, 0, 0, sizeX, sizeY);
-
-
 
 
 		ImageButton onlineButton=new ImageButton("/images/buttons/local_button.png", (sizeX-100)/2, sizeY*6/10, 100, 50);

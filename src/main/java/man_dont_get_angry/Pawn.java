@@ -44,20 +44,23 @@ public class Pawn implements Serializable
 				if(!deployed)
 				{
 					deployPawn();
+					setTheSamePlayer();
 				}
 				else if(isOnPodium)
 				{
 					moveToPodium(podiumPlace+dice.getRolledNumber());
+					setNextPlayer();
 				}
 				else if(traveled+dice.getRolledNumber()<=40)
 				{
 					moveToNext(dice.getRolledNumber());
+					setNextPlayer();
 				}
 				else
 				{
 					moveToPodium((traveled+dice.getRolledNumber())-41);
+					setNextPlayer();
 				}
-				setNextPlayer();
 			}
 		};
 	}

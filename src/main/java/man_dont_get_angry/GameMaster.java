@@ -3,12 +3,8 @@ package man_dont_get_angry;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Arrays;
 
-import static man_dont_get_angry.Client.getSocket;
 import static man_dont_get_angry.Dice.rollPossible;
 import static man_dont_get_angry.LoadLevel.changeBackground;
 
@@ -102,10 +98,19 @@ public class GameMaster
 		new EndGameScreen(root, currentPlayer);
 	}
 
+	public static void setTheSamePlayer(){
+		if(checkWin())
+		{
+			clearLevel();
+			return;
+		}
+		rollPossible=true;
+		currentPlayer.turnFinished();
+	}
+
 	public static void setNextPlayer(){
 		if(checkWin())
 		{
-			sendUpdate();
 			clearLevel();
 			return;
 		}
@@ -126,32 +131,34 @@ public class GameMaster
 		}
 		currentPlayer=players[currentPlayerID];
 		changeBackground(currentPlayerID);
-		sendUpdate();
 	}
-
+/*
 	public static void sendUpdate(){
-		Socket socket=getSocket();
-		ObjectOutputStream out =null;
-		try
+		if(!isOffline)
 		{
-			out=new ObjectOutputStream(socket.getOutputStream());
+			Socket socket=getSocket();
+			ObjectOutputStream out=null;
+			try
+			{
+				out=new ObjectOutputStream(socket.getOutputStream());
 
-		out.writeObject(currentPlayerID);
-			out.writeObject(podium);
-			out.writeObject(dice);
-			out.writeObject(currentPlayer);
-			out.writeObject(players);
-			out.writeObject(numberOfPlayers);
-			out.writeObject(pathStatus);
+				out.writeObject(currentPlayerID);
+				out.writeObject(podium);
+				out.writeObject(dice);
+				out.writeObject(currentPlayer);
+				out.writeObject(players);
+				out.writeObject(numberOfPlayers);
+				out.writeObject(pathStatus);
 
-			out.close();
-		}catch(IOException e)
-		{
-			e.printStackTrace();
+				out.close();
+			}catch(IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void getUpdate(){
 
-	}
+	}*/
 }

@@ -66,7 +66,7 @@ public class Server
 				}
 				catch(Exception e)
 				{
-					System.out.println(e);
+					e.printStackTrace();
 				}
 			}
 
