@@ -20,13 +20,13 @@ public class Player implements Serializable
 		for(int i=0; i<4; i++)
 		{
 			if(PlayerID==0)
-			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/green_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/green_pawn.png")).toString()),i);}
 			else if(PlayerID==1)
-			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/yellow_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/yellow_pawn.png")).toString()),i);}
 			else if(PlayerID==2)
-			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/blue_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/blue_pawn.png")).toString()),i);}
 			else
-			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/red_pawn.png")).toString()));}
+			{playerPawns[i]=new Pawn(PlayerID, new Image(Objects.requireNonNull(getClass().getResource("/images/pawns/red_pawn.png")).toString()),i);}
 		}
 	}
 

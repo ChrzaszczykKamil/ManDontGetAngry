@@ -2,6 +2,7 @@ package man_dont_get_angry;
 
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -35,6 +36,7 @@ public class ImageButton
 		theButton.setLayoutX(x);
 		theButton.setLayoutY(y);
 		theButton.setBackground(null);
+		theButton.setCursor(Cursor.HAND);
 		EventHandler <MouseEvent> bigger=e->{
 			ScaleTransition makeBigger=new ScaleTransition(Duration.millis(75), (Node)e.getSource());
 			makeBigger.setToY(1.1);

@@ -26,7 +26,7 @@ public class Pawn implements Serializable
 	private boolean deployed;
 	private boolean isOnPodium;
 
-	public Pawn(int playerID, Image img){
+	public Pawn(int playerID, Image img, int id){
 		this.x=0;
 		this.y=0;
 		this.playerID=playerID;
@@ -39,30 +39,36 @@ public class Pawn implements Serializable
 
 		pawnIV=new ImageView(img);
 		eventHandler =e ->{
+			if(!isOffline)
+				sendData(id+4000);
 			if(isOffline ||currentPlayerID==clientID)
 			{
-				if(!deployed)
-				{
-					deployPawn();
-					setTheSamePlayer();
-				}
-				else if(isOnPodium)
-				{
-					moveToPodium(podiumPlace+dice.getRolledNumber());
-					setNextPlayer();
-				}
-				else if(traveled+dice.getRolledNumber()<=40)
-				{
-					moveToNext(dice.getRolledNumber());
-					setNextPlayer();
-				}
-				else
-				{
-					moveToPodium((traveled+dice.getRolledNumber())-41);
-					setNextPlayer();
-				}
+				event();
 			}
 		};
+	}
+
+	public void event(){
+			if(!deployed)
+			{
+				deployPawn();
+				setTheSamePlayer();
+			}
+			else if(isOnPodium)
+			{
+				moveToPodium(podiumPlace+dice.getRolledNumber());
+				setNextPlayer();
+			}
+			else if(traveled+dice.getRolledNumber()<=40)
+			{
+				moveToNext(dice.getRolledNumber());
+				setNextPlayer();
+			}
+			else
+			{
+				moveToPodium((traveled+dice.getRolledNumber())-41);
+				setNextPlayer();
+			}
 	}
 
 	public void setInitialXY(double startX, double startY){

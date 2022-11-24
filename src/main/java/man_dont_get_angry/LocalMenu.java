@@ -32,6 +32,10 @@ public class LocalMenu{
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		background = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
+		Image green = new Image(Objects.requireNonNull(getClass().getResource("/images/green_background.png")).toString());
+		Image red = new Image(Objects.requireNonNull(getClass().getResource("/images/red_background.png")).toString());
+		Image yellow = new Image(Objects.requireNonNull(getClass().getResource("/images/yellow_background.png")).toString());
+		Image blue = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
 		backgroundAnimation=0;
 
 		Timer timer = new Timer();
@@ -39,18 +43,17 @@ public class LocalMenu{
 			@Override
 			public void run() {
 				if(backgroundAnimation%4==0){
-					background = new Image(Objects.requireNonNull(getClass().getResource("/images/green_background.png")).toString());
+					gc.drawImage(green, 0, 0, sizeX, sizeY);
 				}
 				else if(backgroundAnimation%4==1){
-					background = new Image(Objects.requireNonNull(getClass().getResource("/images/red_background.png")).toString());
+					gc.drawImage(red, 0, 0, sizeX, sizeY);
 				}
 				else if(backgroundAnimation%4==2){
-					background = new Image(Objects.requireNonNull(getClass().getResource("/images/yellow_background.png")).toString());
+					gc.drawImage(yellow, 0, 0, sizeX, sizeY);
 				}
 				else{
-					background = new Image(Objects.requireNonNull(getClass().getResource("/images/blue_background.png")).toString());
+					gc.drawImage(blue, 0, 0, sizeX, sizeY);
 				}
-				gc.drawImage(background, 0, 0, sizeX, sizeY);
 				backgroundAnimation++;
 			}
 		}, 0, 3000);

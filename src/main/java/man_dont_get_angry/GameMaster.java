@@ -22,6 +22,8 @@ public class GameMaster
 	public static int numberOfPlayers;
 	private static int[] pathStatus;
 
+	private static ClientGameMaster client;
+
 	public GameMaster(Scene scene) {
 		LoadLevel lvl=new LoadLevel(scene);
 		root=lvl.getRoot();
@@ -45,6 +47,10 @@ public class GameMaster
 
 	public static void setPlayersCount(int x){
 		numberOfPlayers=x;
+	}
+
+	public static int getPlayersCount(){
+		return numberOfPlayers;
 	}
 
 	public static void playerTurn(){
@@ -93,7 +99,7 @@ public class GameMaster
 		return false;
 	}
 
-	private static void clearLevel(){
+	public static void clearLevel(){
 		System.out.println("WINNER");
 		new EndGameScreen(root, currentPlayer);
 	}
@@ -131,34 +137,33 @@ public class GameMaster
 		}
 		currentPlayer=players[currentPlayerID];
 		changeBackground(currentPlayerID);
-	}
-/*
-	public static void sendUpdate(){
 		if(!isOffline)
+			sendData(currentPlayerID+2000);
+	}
+
+	public static void sendData(int x){
+		client.write(x);
+	}
+
+	public static void setData(int x){
+		if(3000>x&&x>=2000)
 		{
-			Socket socket=getSocket();
-			ObjectOutputStream out=null;
-			try
-			{
-				out=new ObjectOutputStream(socket.getOutputStream());
-
-				out.writeObject(currentPlayerID);
-				out.writeObject(podium);
-				out.writeObject(dice);
-				out.writeObject(currentPlayer);
-				out.writeObject(players);
-				out.writeObject(numberOfPlayers);
-				out.writeObject(pathStatus);
-
-				out.close();
-			}catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			setCurrentPlayer(x-2000);
+			changeBackground(currentPlayerID);
+		}else if(4000>x&&x>=3000){
+			dice.setDiceRoll(x-3000);
+		}else if(5000>x&&x>=4000){
+			System.out.println("MOVING PAWN #"+ x);
+			currentPlayer.getPlayerPawns()[x-4000].event();
 		}
 	}
 
-	public void getUpdate(){
+	public static void setCurrentPlayer(int id){
+		currentPlayerID=id;
+		currentPlayer=players[id];
+	}
 
-	}*/
+	void getClient(ClientGameMaster c){
+		client=c;
+	}
 }
