@@ -2,11 +2,14 @@
 Man, Don't Get Angry! (Mensch ärgere Dich nicht) is a popular German game made fully in JavaFX
 
 ## Installation
-git clone https://github.com/ChrzaszczykKamil/ManDontGetAngry
-
-build.sh
-
-run.sh
+In the main directory run:
+```
+$ ./build.sh
+```
+To start ues
+```
+$ ./run.sh
+```
 
 ## Game Rules
 * Game is made for 2-4 people
