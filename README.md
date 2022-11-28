@@ -6,7 +6,7 @@ In the main directory run:
 ```
 $ ./build.sh
 ```
-To start ues
+To start use
 ```
 $ ./run.sh
 ```
