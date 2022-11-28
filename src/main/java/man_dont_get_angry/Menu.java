@@ -75,7 +75,7 @@ public class Menu
 		ImageButton localButton=new ImageButton("/images/buttons/online_button.png", (sizeX-100)/2, sizeY*7/10, 100, 50);
 		menuRoot.getChildren().add(localButton.get());
 		localButton.get().setOnAction(e->{
-			new Client("127.0.0.1", 5000, scene);
+			new Client("23.102.51.210", 5000, scene);
 		});
 
 		ImageButton exitButton=new ImageButton("/images/buttons/exit_button.png", (sizeX-100)/2, sizeY*8/10, 100, 50);
